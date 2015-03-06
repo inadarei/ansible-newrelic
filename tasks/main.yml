@@ -13,13 +13,11 @@
 - include: default.yml
   when: newrelic_loaded_os_family|default(False) == False
 
-- name: Configure New Relic Sysmond
-  template:
-    src: nrsysmond.cfg.j2
-    dest: /etc/newrelic/nrsysmond.cfg
-    group: newrelic
-    owner: root
-    mode: 0640
+- name: "Install Newrelic license key"
+  lineinfile: dest=/etc/newrelic/nrsysmond.cfg
+              state=present
+              regexp="license_key=REPLACE_WITH_REAL_KEY"
+              line="license_key={{ newrelic_licence_key }}"
   notify:
     - Restart New Relic
   when: newrelic_loaded_os_family|default(False) != False
